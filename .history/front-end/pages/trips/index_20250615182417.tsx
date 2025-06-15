@@ -37,11 +37,11 @@ const Trips: React.FC = () => {
           {true && (
             <div className="mt-4">
               <h2 className="text-xl font-semibold mb-4">
-                Available Holidays ({trips.length})
+                Available Holidays ({0})
               </h2>
               <div className="grid gap-4">
                 {" "}
-                {trips.map((trip) => (
+                {[].map((trip) => (
                   <div key={trip.id} className="p-4 border rounded-lg">
                     <h3 className="font-bold text-lg">🏖️ {trip.destination}</h3>
                     <p className="text-gray-600 mb-2">{trip.description}</p>

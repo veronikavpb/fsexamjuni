@@ -162,19 +162,15 @@ const TripDetail: React.FC = () => {
               <h2 className="text-xl font-semibold mb-3">
                 Attendees ({trip.attendees?.length || 0})
               </h2>
-              {trip.attendees && trip.attendees.length > 0 ? (
+              {false && (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {trip.attendees.map((attendee, index) => (
+                  {[].map((attendee, index) => (
                     <div key={index} className="bg-gray-100 rounded-lg p-3">
-                      <p className="font-medium">
-                        {attendee.firstName} {attendee.lastName}
-                      </p>
-                      <p className="text-sm text-gray-600">{attendee.email}</p>
+                      <p className="font-medium">{}</p>
+                      <p className="text-sm text-gray-600">{}</p>
                     </div>
                   ))}
                 </div>
-              ) : (
-                <p className="text-gray-500">No attendees yet.</p>
               )}
             </div>
           </div>

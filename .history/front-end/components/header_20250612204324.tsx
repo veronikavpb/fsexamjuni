@@ -10,26 +10,10 @@ const Header: React.FC = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    const loadUser = () => {
-      const loggedInUserString = sessionStorage.getItem("loggedInUser");
-      if (loggedInUserString !== null) {
-        setLoggedInUser(JSON.parse(loggedInUserString));
-      } else {
-        setLoggedInUser(null);
-      }
-    };
-
-    loadUser(); // ✅ initial load
-
-    const handleStorageChange = () => {
-      loadUser(); // ✅ refresh if sessionStorage changes
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
+    const loggedInUserString = sessionStorage.getItem("loggedInUser");
+    if (loggedInUserString !== null) {
+      setLoggedInUser(JSON.parse(loggedInUserString));
+    }
   }, []);
 
   const handleClick = () => {

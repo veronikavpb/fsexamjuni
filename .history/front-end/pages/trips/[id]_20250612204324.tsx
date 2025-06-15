@@ -14,22 +14,7 @@ const TripDetail: React.FC = () => {
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(true);
 
-  const getTrip = async () => {
-    try {
-      const response = await TripService.getTripById(String(id));
-      if (!response.ok) throw new Error("Failed to fetch trip details");
-      const data = await response.json();
-      setTrip(data);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (id) getTrip();
-  }, [id]);
+  const getTrip = async () =>{}
 
   if (loading) {
     return (
@@ -162,19 +147,20 @@ const TripDetail: React.FC = () => {
               <h2 className="text-xl font-semibold mb-3">
                 Attendees ({trip.attendees?.length || 0})
               </h2>
-              {trip.attendees && trip.attendees.length > 0 ? (
+              {false && (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {trip.attendees.map((attendee, index) => (
-                    <div key={index} className="bg-gray-100 rounded-lg p-3">
+                  {[].map((attendee, index) => (
+                    <div
+                      key={index}
+                      className="bg-gray-100 rounded-lg p-3"
+                    >
                       <p className="font-medium">
-                        {attendee.firstName} {attendee.lastName}
+                        {}
                       </p>
-                      <p className="text-sm text-gray-600">{attendee.email}</p>
+                      <p className="text-sm text-gray-600">{}</p>
                     </div>
                   ))}
                 </div>
-              ) : (
-                <p className="text-gray-500">No attendees yet.</p>
               )}
             </div>
           </div>

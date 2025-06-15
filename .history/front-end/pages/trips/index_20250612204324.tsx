@@ -8,18 +8,8 @@ import Link from "next/link";
 
 const Trips: React.FC = () => {
   const [error, setError] = useState<string>();
-  const [trips, setTrips] = useState<Holiday[]>([]);
 
-  const getTrips = async () => {
-    try {
-      const response = await TripService.getAllTrips();
-      if (!response.ok) throw new Error("Failed to load trips");
-      const data = await response.json();
-      setTrips(data);
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
+  const getTrips = () => {};
 
   useEffect(() => {
     getTrips();
@@ -37,27 +27,22 @@ const Trips: React.FC = () => {
           {true && (
             <div className="mt-4">
               <h2 className="text-xl font-semibold mb-4">
-                Available Holidays ({trips.length})
+                Available Holidays ({0})
               </h2>
               <div className="grid gap-4">
                 {" "}
-                {trips.map((trip) => (
-                  <div key={trip.id} className="p-4 border rounded-lg">
-                    <h3 className="font-bold text-lg">🏖️ {trip.destination}</h3>
-                    <p className="text-gray-600 mb-2">{trip.description}</p>
+                {[].map((trip) => (
+                  <div key={} className="p-4 border rounded-lg">
+                    <h3 className="font-bold text-lg">🏖️ {}</h3>
+                    <p className="text-gray-600 mb-2">{}</p>
                     <p className="text-sm">
-                      📅 {new Date(trip.startDate).toLocaleDateString()} -{" "}
-                      {new Date(trip.endDate).toLocaleDateString()}
+                      📅 {new Date().toLocaleDateString()} -{" "}
+                      {new Date().toLocaleDateString()}
                     </p>
-                    <p className="text-sm">
-                      👤 Organiser: {trip.organiser.firstName}{" "}
-                      {trip.organiser.lastName}
-                    </p>
-                    <p className="text-sm mb-3">
-                      👥 Attendees: {trip.attendeesCount} people
-                    </p>
+                    <p className="text-sm">👤 Organiser: {}</p>
+                    <p className="text-sm mb-3">👥 Attendees: {} people</p>
                     <Link
-                      href={`/trips/${trip.id}`}
+                      href={`/trips/${1}`}
                       className="bg-blue-700 hover:bg-blue-800 text-white font-medium rounded-lg text-sm px-4 py-2"
                     >
                       More Info

@@ -6,7 +6,6 @@ export type Holiday = {
   description: string;
   organiser: User;
   attendees: User[];
-  attendeesCount: number;
 };
 
 export type Experience = {

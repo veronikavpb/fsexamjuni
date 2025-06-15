@@ -13,7 +13,6 @@ const UserLoginForm: React.FC = () => {
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
   const router = useRouter();
   const { t } = useTranslation();
-
   const validateEmail = (emailValue: string) => {
     if (!emailValue || emailValue.trim() === "") {
       setEmailError(t("login.validate.emailRequired"));
@@ -43,12 +42,12 @@ const UserLoginForm: React.FC = () => {
     setPasswordError(null);
 
     if (!email || email.trim() === "") {
-      setEmailError("E-mail is required");
+      setEmailError(t("login.validate.emailRequired"));
       result = false;
     }
 
     if (!password || password.trim() === "") {
-      setPasswordError("Password is required");
+      setPasswordError(t("login.validate.password"));
       result = false;
     }
 
@@ -67,12 +66,7 @@ const UserLoginForm: React.FC = () => {
     const response = await UserService.loginUser(credentials);
 
     if (response.status === 200) {
-      setStatusMessages([
-        {
-          message: "Login successful. Redirecting to homepage...",
-          type: "success",
-        },
-      ]);
+      setStatusMessages([{ message: t("login.success"), type: "success" }]);
       const user = await response.json();
       sessionStorage.setItem(
         "loggedInUser",

@@ -75,28 +75,6 @@ const tripRouter = express.Router();
  *                   example: "Database error. See server log for details."
  */
 tripRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const trips = await tripService.getAllTrips();
-        const simplifiedTrips = trips.map((trip) => ({
-            id: trip.getId(),
-            destination: trip.getDestination(),
-            description: trip.getDescription(),
-            startDate: trip.getStartDate(),
-            endDate: trip.getEndDate(),
-            organiser: {
-                firstName: trip.getOrganiser().getFirstName(),
-                lastName: trip.getOrganiser().getLastName(),
-            },
-            attendeesCount: trip.getAttendees().length,
-        }));
-        res.status(200).json(simplifiedTrips);
-    } catch (error) {
-        console.error('Error fetching trips:', error);
-        res.status(500).json({
-            status: 'application error',
-            message: 'Database error. See server log for details.',
-        });
-    }
 });
 
 /**
@@ -140,51 +118,6 @@ tripRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *         description: Internal server error
  */
 tripRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const id = parseInt(req.params.id, 10);
-
-        if (isNaN(id)) {
-            return res.status(400).json({
-                status: 'application error',
-                message: 'Invalid trip ID provided.',
-            });
-        }
-
-        const trip = await tripService.getTripById({ id });
-
-        const tripDto = {
-            id: trip.getId(),
-            destination: trip.getDestination(),
-            description: trip.getDescription(),
-            startDate: trip.getStartDate(),
-            endDate: trip.getEndDate(),
-            organiser: {
-                firstName: trip.getOrganiser().getFirstName(),
-                lastName: trip.getOrganiser().getLastName(),
-                email: trip.getOrganiser().getEmail(),
-            },
-            attendees: trip.getAttendees().map((user) => ({
-                firstName: user.getFirstName(),
-                lastName: user.getLastName(),
-                email: user.getEmail(),
-            })),
-        };
-
-        res.status(200).json(trip);
-    } catch (error: any) {
-        if (error.message?.includes('does not exist')) {
-            return res.status(404).json({
-                status: 'application error',
-                message: error.message,
-            });
-        }
-
-        console.error('Error fetching trip by ID:', error);
-        res.status(500).json({
-            status: 'application error',
-            message: 'Unexpected error occurred.',
-        });
-    }
 });
 
 export { tripRouter };

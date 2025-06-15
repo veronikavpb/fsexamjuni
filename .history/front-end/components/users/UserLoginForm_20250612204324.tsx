@@ -13,7 +13,6 @@ const UserLoginForm: React.FC = () => {
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
   const router = useRouter();
   const { t } = useTranslation();
-
   const validateEmail = (emailValue: string) => {
     if (!emailValue || emailValue.trim() === "") {
       setEmailError(t("login.validate.emailRequired"));
@@ -43,12 +42,12 @@ const UserLoginForm: React.FC = () => {
     setPasswordError(null);
 
     if (!email || email.trim() === "") {
-      setEmailError("E-mail is required");
+      setEmailError(t("login.validate.emailRequired"));
       result = false;
     }
 
     if (!password || password.trim() === "") {
-      setPasswordError("Password is required");
+      setPasswordError(t("login.validate.password"));
       result = false;
     }
 
@@ -67,12 +66,7 @@ const UserLoginForm: React.FC = () => {
     const response = await UserService.loginUser(credentials);
 
     if (response.status === 200) {
-      setStatusMessages([
-        {
-          message: "Login successful. Redirecting to homepage...",
-          type: "success",
-        },
-      ]);
+      setStatusMessages([{ message: t("login.success"), type: "success" }]);
       const user = await response.json();
       sessionStorage.setItem(
         "loggedInUser",
@@ -89,20 +83,11 @@ const UserLoginForm: React.FC = () => {
       }, 2000);
     } else if (response.status === 401) {
       const { errorMessage } = await response.json();
-      if (errorMessage.toLowerCase().includes("password")) {
-        setStatusMessages([{ message: "Incorrect password.", type: "error" }]); // ✅ custom message
-      } else {
-        setStatusMessages([
-          {
-            message: "Login failed. Please check your credentials.",
-            type: "error",
-          },
-        ]);
-      }
+      setStatusMessages([{ message: errorMessage, type: "error" }]);
     } else {
       setStatusMessages([
         {
-          message: "An error occurred. Please try again later.",
+          message: t("general.error"),
           type: "error",
         },
       ]);

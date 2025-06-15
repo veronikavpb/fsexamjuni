@@ -77,19 +77,7 @@ const tripRouter = express.Router();
 tripRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const trips = await tripService.getAllTrips();
-        const simplifiedTrips = trips.map((trip) => ({
-            id: trip.getId(),
-            destination: trip.getDestination(),
-            description: trip.getDescription(),
-            startDate: trip.getStartDate(),
-            endDate: trip.getEndDate(),
-            organiser: {
-                firstName: trip.getOrganiser().getFirstName(),
-                lastName: trip.getOrganiser().getLastName(),
-            },
-            attendeesCount: trip.getAttendees().length,
-        }));
-        res.status(200).json(simplifiedTrips);
+        res.status(200).json(trips);
     } catch (error) {
         console.error('Error fetching trips:', error);
         res.status(500).json({
@@ -151,24 +139,6 @@ tripRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
         }
 
         const trip = await tripService.getTripById({ id });
-
-        const tripDto = {
-            id: trip.getId(),
-            destination: trip.getDestination(),
-            description: trip.getDescription(),
-            startDate: trip.getStartDate(),
-            endDate: trip.getEndDate(),
-            organiser: {
-                firstName: trip.getOrganiser().getFirstName(),
-                lastName: trip.getOrganiser().getLastName(),
-                email: trip.getOrganiser().getEmail(),
-            },
-            attendees: trip.getAttendees().map((user) => ({
-                firstName: user.getFirstName(),
-                lastName: user.getLastName(),
-                email: user.getEmail(),
-            })),
-        };
 
         res.status(200).json(trip);
     } catch (error: any) {
