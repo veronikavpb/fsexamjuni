@@ -32,6 +32,12 @@ const createEvent = async (input: {
     location: string;
     organiserId: number;
 }): Promise<Event> => {
+    const existing = (
+        await eventDB.getEventsByOrganiserId({ organiserId: input.organiserId })
+    ).find((e) => e.getDate().getTime() === input.date.getTime());
+    if (existing) {
+        throw new Error('You already have an event on this date.');
+    }
     return await eventDB.createEvent(input);
 };
 

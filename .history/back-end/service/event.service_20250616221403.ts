@@ -32,6 +32,15 @@ const createEvent = async (input: {
     location: string;
     organiserId: number;
 }): Promise<Event> => {
+    // ──────── Validation Rule – Date Conflict ────────
+    // Check if this organiser already has an event on the exact same date
+    const existing = await eventDB.findEventByOrganiserAndDate(input.organiserId, input.date);
+    if (existing) {
+        throw new Error('You already have an experience on this date.');
+    }
+    // ────────────────────────────────────────────────────
+
+    // If no conflict, proceed to create
     return await eventDB.createEvent(input);
 };
 
