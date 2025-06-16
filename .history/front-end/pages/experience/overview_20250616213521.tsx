@@ -8,7 +8,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import ExperienceService from "@services/ExperienceService";
 
 const Experiences: React.FC = () => {
-  const [loggedInUser, setLoggedInUser] = useState<LoggedInUser | null>(null);
+  const [user, setUser] = useState<LoggedInUser | null>(null);
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [error, setError] = useState<string>();
   const [showOnlyMine, setShowOnlyMine] = useState(false);
@@ -16,14 +16,14 @@ const Experiences: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const stored = sessionStorage.getItem("loggedInUser");
-    if (stored) setLoggedInUser(JSON.parse(stored));
+    const raw = sessionStorage.getItem("loggedInUser");
+    if (raw) setUser(JSON.parse(raw));
   }, []);
 
   const fetchAll = async () => {
-    setError("");
+    if (!user) return;
     setLoading(true);
-    const resp = await ExperienceService.getAllExperiences();
+    const resp = await ExperienceService.getAllExperiences(user.token);
     if (!resp.ok) {
       setError("Failed to load experiences");
     } else {
@@ -33,12 +33,9 @@ const Experiences: React.FC = () => {
   };
 
   const fetchMine = async () => {
-    if (!loggedInUser) return;
-    setError("");
+    if (!user) return;
     setLoading(true);
-    const resp = await ExperienceService.getExperiencesByOrganiser(
-      loggedInUser.id
-    );
+    const resp = await ExperienceService.getExperiencesByOrganiser(user.token);
     if (!resp.ok) {
       setError("Failed to load your experiences");
     } else {
@@ -48,16 +45,12 @@ const Experiences: React.FC = () => {
   };
 
   useEffect(() => {
-    if (loggedInUser) {
-      if (showOnlyMine && loggedInUser.role === "ORGANISER") {
-        fetchMine();
-      } else {
-        fetchAll();
-      }
+    if (user) {
+      showOnlyMine && user.role === "ORGANISER" ? fetchMine() : fetchAll();
     }
-  }, [loggedInUser, showOnlyMine]);
+  }, [user, showOnlyMine]);
 
-  if (!loggedInUser) {
+  if (!user) {
     return (
       <>
         <Header />
@@ -80,20 +73,20 @@ const Experiences: React.FC = () => {
         <title>Experiences</title>
       </Head>
       <Header />
-      <main className="p-6 flex flex-col items-center">
+      <main className="p-6 min-h-screen flex flex-col items-center">
         <h1 className="text-2xl font-bold mb-4">Travel Experiences</h1>
 
-        {loggedInUser.role === "ORGANISER" && (
+        {user.role === "ORGANISER" && (
           <div className="flex gap-3 mb-4">
             <button
-              onClick={() => setShowOnlyMine((v) => !v)}
-              className="bg-blue-700 hover:bg-blue-800 text-white px-5 py-2 rounded"
+              onClick={() => setShowOnlyMine((prev) => !prev)}
+              className="bg-blue-700 hover:bg-blue-800 text-white font-medium rounded-lg px-5 py-2.5"
             >
               {showOnlyMine ? "Show All Experiences" : "Show Only Mine"}
             </button>
             <button
               onClick={() => setShowCreateForm(true)}
-              className="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded"
+              className="bg-green-700 hover:bg-green-800 text-white font-medium rounded-lg px-5 py-2.5"
             >
               Create New Experience
             </button>
@@ -101,7 +94,7 @@ const Experiences: React.FC = () => {
         )}
 
         <h2 className="text-xl font-semibold mb-4">
-          {showOnlyMine && loggedInUser.role === "ORGANISER"
+          {showOnlyMine && user.role === "ORGANISER"
             ? `My Experiences (${experiences.length})`
             : `Available Experiences (${experiences.length})`}
         </h2>
@@ -134,7 +127,7 @@ const Experiences: React.FC = () => {
         {showCreateForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <CreateExperienceForm
-              user={loggedInUser}
+              user={user}
               onSuccess={() => {
                 setShowCreateForm(false);
                 fetchAll();

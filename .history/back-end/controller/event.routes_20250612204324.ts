@@ -102,7 +102,7 @@ const eventRouter = express.Router();
  */
 eventRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const events = await eventService.getAllEvents();
+        const events: any = [];
         res.status(200).json(events);
     } catch (error) {
         next(error);
@@ -209,7 +209,7 @@ eventRouter.get(
  */
 eventRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { name, description, date, location, organiserId } = req.body;
+        const { name, description, date, location } = req.body;
         const auth = (req as any).auth;
 
         if (!auth || !auth.email) {
@@ -221,13 +221,6 @@ eventRouter.post('/', async (req: Request, res: Response, next: NextFunction) =>
         const user = await userService.getUserByEmail({ email: auth.email });
 
         //create event here
-        const event = await eventService.createEvent({
-            name,
-            description,
-            date: new Date(date),
-            location,
-            organiserId,
-        });
 
         res.status(201).json(event);
     } catch (error) {

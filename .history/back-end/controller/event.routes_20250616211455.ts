@@ -209,7 +209,7 @@ eventRouter.get(
  */
 eventRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { name, description, date, location, organiserId } = req.body;
+        const { name, description, date, location } = req.body;
         const auth = (req as any).auth;
 
         if (!auth || !auth.email) {

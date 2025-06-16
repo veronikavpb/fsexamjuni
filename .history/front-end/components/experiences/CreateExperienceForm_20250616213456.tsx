@@ -69,11 +69,6 @@ const CreateExperienceForm: React.FC<Props> = ({
         const created: Experience = await resp.json();
         setStatusMessage({ message: "Experience created!", type: "success" });
         onSuccess(created);
-
-        setName("");
-        setDescription("");
-        setDate("");
-        setLocation("");
       } else {
         const err = await resp.json();
         setStatusMessage({

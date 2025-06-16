@@ -1,5 +1,4 @@
 import { Experience } from "@types";
-
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
 const getToken = (): string => {
@@ -7,8 +6,8 @@ const getToken = (): string => {
   return loggedInUserString ? JSON.parse(loggedInUserString).token : "";
 };
 
-const getAllExperiences = (): Promise<Response> => {
-  return fetch(`${API_BASE}/events`, {
+const getAllExperiences = () => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + "/events", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -17,14 +16,17 @@ const getAllExperiences = (): Promise<Response> => {
   });
 };
 
-const getExperiencesByOrganiser = (organiserId: number): Promise<Response> => {
-  return fetch(`${API_BASE}/events/organiser/${organiserId}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${getToken()}`,
-    },
-  });
+const getExperiencesByOrganiser = (organiserId: number) => {
+  return fetch(
+    process.env.NEXT_PUBLIC_API_URL + `/events/organiser/${organiserId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    }
+  );
 };
 
 const createExperience = (experience: {
@@ -32,9 +34,8 @@ const createExperience = (experience: {
   description: string;
   date: string;
   location: string;
-  organiserId: number;
-}): Promise<Response> => {
-  return fetch(`${API_BASE}/events`, {
+}) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + "/events", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

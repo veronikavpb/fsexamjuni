@@ -69,11 +69,6 @@ const CreateExperienceForm: React.FC<Props> = ({
         const created: Experience = await resp.json();
         setStatusMessage({ message: "Experience created!", type: "success" });
         onSuccess(created);
-
-        setName("");
-        setDescription("");
-        setDate("");
-        setLocation("");
       } else {
         const err = await resp.json();
         setStatusMessage({
@@ -113,8 +108,6 @@ const CreateExperienceForm: React.FC<Props> = ({
           <input
             type="text"
             id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             placeholder="Enter experience name"
           />
@@ -123,43 +116,43 @@ const CreateExperienceForm: React.FC<Props> = ({
         <div>
           <label
             htmlFor="description"
-            className="block text-sm font-medium mb-1"
+            className="block text-sm font-medium text-gray-700 mb-1"
           >
             Description *
           </label>
           <textarea
             id="description"
             rows={3}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             placeholder="Describe the experience"
           />
         </div>
 
         <div>
-          <label htmlFor="date" className="block text-sm font-medium mb-1">
+          <label
+            htmlFor="date"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Date *
           </label>
           <input
-            id="date"
             type="datetime-local"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="w-full p-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+            id="date"
+            className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
 
         <div>
-          <label htmlFor="location" className="block text-sm font-medium mb-1">
+          <label
+            htmlFor="location"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Location *
           </label>
           <input
-            id="location"
             type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="w-full p-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+            id="location"
+            className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             placeholder="Enter location"
           />
         </div>

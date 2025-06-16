@@ -19,11 +19,7 @@ const getEventsByOrganiserId = async ({
     return await eventDB.getEventsByOrganiserId({ organiserId });
 };
 
-const getUpcomingEvents = async (): Promise<Event[]> => {
-    const all = await eventDB.getAllEvents();
-    const now = new Date();
-    return all.filter((evt) => evt.getDate() > now);
-};
+const getUpcomingEvents = () => {};
 
 const createEvent = async (input: {
     name: string;

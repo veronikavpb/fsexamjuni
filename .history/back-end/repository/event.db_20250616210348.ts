@@ -39,25 +39,7 @@ const getEventsByOrganiserId = async ({
     }
 };
 
-const createEvent = async (input: {
-    name: string;
-    description: string;
-    date: Date;
-    location: string;
-    organiserId: number;
-}): Promise<Event> => {
-    const record = await database.event.create({
-        data: {
-            name: input.name,
-            description: input.description,
-            date: input.date,
-            location: input.location,
-            organiserId: input.organiserId,
-        },
-        include: { organiser: true, attendees: true },
-    });
-    return Event.from(record);
-};
+const createEvent = () => {};
 
 export default {
     getAllEvents,
